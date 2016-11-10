@@ -1,6 +1,7 @@
 import jsm
 import datetime
 import numpy as np
+
 q = jsm.Quotes()
 TIME_TYPE=["DAILY","WEEKLY","MONTHLY","YEARLY"]
 
@@ -109,12 +110,12 @@ def get_end_price(stock_id,time_type):
                 price=q.get_historical_prices(id,jsm_type)
                 price.append(get_price)
 
-    elif isinstance(data_type,(int,np.int64):
+    elif isinstance(data_type,(int,np.int64)):
         if time_type=="DAILY":
             price.append(q.get_price(stock_id).open)
         else:
             price.append(q.get_historical_prices(stock_id,jsm_type))
-    
+
     if type(price) is list:
         for data in price:
 
@@ -187,3 +188,4 @@ def get_current_month_data(stock_id):
 
 def data_type_check(data):
     return type(data)
+'''

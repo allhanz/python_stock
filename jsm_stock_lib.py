@@ -117,9 +117,7 @@ def get_end_price(stock_id,time_type):
             price.append(q.get_historical_prices(stock_id,jsm_type))
 
     if type(price) is list:
-        for data in price:
-
-        end_price=price[len(price)]
+        end_price = price[len(price)-1]
     elif isinstance(price,(int,np.int64)):
         end_price=price
     return end_price
@@ -188,4 +186,3 @@ def get_current_month_data(stock_id):
 
 def data_type_check(data):
     return type(data)
-'''

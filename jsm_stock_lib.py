@@ -3,7 +3,13 @@ import datetime
 import numpy as np
 
 q = jsm.Quotes()
-TIME_TYPE=["DAILY","WEEKLY","MONTHLY","YEARLY"]
+TIME_TYPE={"DAILY":jsm.DAILY,"WEEKLY":jsm.WEEKLY,"MONTHLY":jsm.MONTHLY}
+
+def jsm_type_check(time_type):
+    if TIME_TYPE[time_type]:
+        return TIME_TYPE[time_type]
+    else:
+        return jsm.DAILY
 
 def int_value_check(stock_id):
     #print(type(stock_id))

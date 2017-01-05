@@ -32,7 +32,7 @@ def main(user, pwd, recipient_list, subject, body):
 def gmail_test():
     user='hanzhong1987@gmail.com'
     pwd="mikehan6151gmail"
-    recipient_list="hanzhong1987@gmail.com"
+    recipient_list=["hanzhong1987@gmail.com","hanzhong1987@ezweb.ne.jp"]
     subject="test mail"
     body="hello"
     main(user, pwd, recipient_list, subject, body)

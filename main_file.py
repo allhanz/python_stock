@@ -5,6 +5,7 @@ import jsm
 import os
 import time
 import calendar
+from japan_stock_id_divided import *
 
 q = jsm.Quotes()
 c = jsm.QuotesCsv()
@@ -16,25 +17,29 @@ date_str=now.strftime("%Y%m%d")
 #stock_id must be a int
 TIME_TYPE=["DAILY","WEEKLY","MONTHLY","YEARLY"]
 
-def read_stock_id(file_name):
+def read_stock_csv_id(file_name):
     #return pd.read_csv(file_name,encoding="utf-8")
     print(file_name)
     data = pd.read_csv(file_name)
     return data
 
 def download_whole_data(stock_id):
-    flag=jsm_stock_lib.int_value_check(stock_id)
+    #flag=jsm_stock_lib.int_value_check(stock_id)
+    flag=int_value_check(stock_id)
     if flag==True:
-        data = jsm_stock_lib.get_whole_daily_data(stock_id)
+        #data = jsm_stock_lib.get_whole_daily_data(stock_id)
+        data = get_whole_daily_data(stock_id)
 
 def save_current_month_to_csv(stock_id): #file_name necessary
-    flag=jsm_stock_lib.int_value_check(stock_id)
+    #flag=jsm_stock_lib.int_value_check(stock_id)
+    flag=int_value_check(stock_id)
     print(flag)
     if not flag:
         print("int data type error")
         return
 
-    type=jsm_stock_lib.data_type_check(stock_id)
+    #type=jsm_stock_lib.data_type_check(stock_id)
+    type=data_type_check(stock_id)
     print(type)
     if type is list:
         for id in stock_id:
@@ -201,13 +206,32 @@ def check_file(dir_path,file_name_list,update_enable): #update_enable:1 update 0
     return update_file_list
 
 def main(save_type):
+    type1="nikkei225"
+    stock_dataframe=read_stock_id(type1)
+    print(len(stock_dataframe["SC"])) # nkkei 225
+    stock_id=stock_dataframe["SC"]
+    list_data=[]
+    for data in stock_id:
+        list_data.append(data)
+    print(len(list_data))
+
+    #save_current_month_to_csv(list_data)
+
+    print("download the whole data!!")
+    #download_whole_data(list_data)
+    #save_whole_data()
+
+    print("main function has been called")
+
+"""
+    #old version source code (not used)
     #    file_name="japan-all-stock-prices.csv"
-    #    stock_id=read_stock_id(file_name)
+    #    stock_id=read_stock_csv_id(file_name)
     #    print(stock_id)
     stock_file_name="stock_id.txt"
     stock_file_name_test="stock_id_test.txt"
-    #stock_id=read_stock_id(stock_file_name)
-    stock_id=read_stock_id(stock_file_name_test)
+    #stock_id=read_stock_csv_id(stock_file_name)
+    stock_id=read_stock_csv_id(stock_file_name_test)
 
     value_data=stock_id.values
     list_data=[]
@@ -224,8 +248,9 @@ def main(save_type):
 
     #save_whole_data()
     print("main function has been called")
+"""
 
 if __name__=="__main__":
-    save_type=sys.argv[1]
-
-    #main(save_type)
+    #save_type=sys.argv[1]
+    save_type="DAILY"
+    main(save_type)

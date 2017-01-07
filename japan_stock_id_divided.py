@@ -8,6 +8,7 @@ import sys
 #sys.setdefaultencoding('utf8')
 x=sys.getdefaultencoding()
 print(x)
+
 """
 def stock_id_divide(sub_name):
     csv_file="./japan-all-stock-ID-oriData.csv"

@@ -14,8 +14,10 @@ import pandas as pd
 import numpy as np
 import matplotlib as mpl
 import matplotlib.pyplot as plt
-from datetime import datetime,timedelta, date
+from datetime import datetime,timedelta,date
 from forex_python.converter import CurrencyRates
+
+stock_mkt_index_folder="./stock_market_index"
 
 def get_price(stock_id):
     print("not implemented!!")
@@ -108,14 +110,15 @@ def get_currency_daily_price(end_date,currency_type):
     EUR_csv_file="./currency_daily_data/EUR_price.csv"
     GBP_csv_file="./currency_daily_data/GBP_price.csv"
     CNY_csv_file="./currency_daily_data/CNY_price.csv"
+    AUD_csv_file="./currency_daily_data/AUD_price.csv"
 
-
-    start_date=datetime(2017,1,1)
+    start_date=datetime(2000,1,1)
+    #start_date=datetime(2017,1,1) # for test
     end_date=datetime.today()
     date_range=daterange(start_date,end_date)
-    print(date_range)
+    #print(date_range)
     c=CurrencyRates()
-    currency_data=pd.DataFrame()
+    #currency_data=pd.DataFrame()
     print(currency_type)
     #if type(currency_type) is list:
         #currency_data.columns=currency_type
@@ -129,6 +132,8 @@ def get_currency_daily_price(end_date,currency_type):
             csv_file=GBP_csv_file
         elif data_type== "CNY":
             csv_file=CNY_csv_file
+        elif data_type=="AUD":
+            csv_file=AUD_csv_file
         else:
             print("currency_type not specified!!please check again!!")
             exit()
@@ -143,7 +148,9 @@ def get_currency_daily_price(end_date,currency_type):
             array_data["date"].append(date)
             array_data["rate"].append(data)
         #print(array_data.values())
-        currency_data=pd.DataFrame(list(array_data.items()),columns=["date","rate"])
+        #currency_data=pd.DataFrame(list(array_data.items()),columns=["date","rate"])
+        currency_data=pd.DataFrame({"date":array_data["date"],"rate":array_data["rate"]})
+        print(currency_data)
         gen_currency_csv_file(currency_data,csv_file)
 
     print(currency_data)
@@ -159,21 +166,127 @@ def gen_currency_csv_file(data,file_path): # the currency daily rate from other 
     data.to_csv(file_path)
 
 def currency_price(currency_type):
-    print("not ")
+    print("not implemented!!")
+
+def get_NASDAQ_daily_index(): #ok
+    folder="nasdaq_index"
+    folder_path=stock_market_index+"/"+folder
+    csv_file="ansdaq_index.csv"
+    file_path=folder_path+"/"+csv_file
+    if os.path.exists(folder_path):
+        os.mkdir(folder_path)
+
+    index_data=quandl.get("NASDAQOMX/COMP", authtoken="q6sne2ob3eZrg7G4KkBi")
+    index_data.to_csv(file_path)
+
+def get_DJIA_daily_index():
+    folder="nasdaq_index"
+    folder_path=stock_market_index+"/"+folder
+    csv_file="ansdaq_index.csv"
+    file_path=folder_path+"/"+csv_file
+    if os.path.exists(folder_path):
+        os.mkdir(folder_path)
+
+    index_data=quandl.get("NASDAQOMX/COMP", authtoken="q6sne2ob3eZrg7G4KkBi")
+    index_data.to_csv(file_path)
+
+def get_SP500_daily_index(): #ok
+    folder="sp500_index"
+    folder_path=stock_market_index+"/"+folder
+    csv_file="sp500_index.csv"
+    file_path=folder_path+"/"+csv_file
+    if os.path.exists(folder_path):
+        os.mkdir(folder_path)
+
+    index_data=quandl.get("YAHOO/INDEX_GSPC", authtoken="q6sne2ob3eZrg7G4KkBi", start_date="1970-01-01")
+    index_data.to_csv(file_path)
+
+def get_DAX_daily_index(): #ok
+    folder="dax_index"
+    folder_path=stock_market_index+"/"+folder
+    csv_file="dax_index.csv"
+    file_path=folder_path+"/"+csv_file
+    if os.path.exists(folder_path):
+        os.mkdir(folder_path)
+
+    index_data=quandl.get("YAHOO/INDEX_GDAXI", authtoken="q6sne2ob3eZrg7G4KkBi")
+    index_data.to_csv(file_path)
+
+def get_ASX_daily_index():
+    folder="asx_index"
+    folder_path=stock_market_index+"/"+folder
+    csv_file="ansdaq_index.csv"
+    file_path=folder_path+"/"+csv_file
+    if os.path.exists(folder_path):
+        os.mkdir(folder_path)
+
+    index_data=quandl.get("NASDAQOMX/COMP", authtoken="q6sne2ob3eZrg7G4KkBi")
+    index_data.to_csv(file_path)
+
+def get_FTSE100_daily_index():
+    folder="nasdaq_index"
+    folder_path=stock_market_index+"/"+folder
+    csv_file="ansdaq_index.csv"
+    file_path=folder_path+"/"+csv_file
+    if os.path.exists(folder_path):
+        os.mkdir(folder_path)
+
+    index_data=quandl.get("NASDAQOMX/COMP", authtoken="q6sne2ob3eZrg7G4KkBi")
+    index_data.to_csv(file_path)
+
+def get_NIKKEI_daily_index(): #ok
+    folder="nikkei_index"
+    folder_path=stock_market_index+"/"+folder
+    csv_file="nikkei_index.csv"
+    file_path=folder_path+"/"+csv_file
+    if os.path.exists(folder_path):
+        os.mkdir(folder_path)
+
+    index_data=quandl.get("NIKKEI/INDEX", authtoken="q6sne2ob3eZrg7G4KkBi", start_date="1970-01-01")
+    index_data.to_csv(file_path)
+
+def get_hangSeng_index(): # hong kong index #ok
+    foler="hangSeng_index"
+    folder_path=stock_market_index+"/"+folder
+    csv_file="hangSeng_index.csv"
+    file_path=folder_path+"/"+csv_file
+    if os.path.exists(folder_path):
+        os.mkdir(folder_path)
+
+    index_data=quandl.get("YAHOO/INDEX_HSI", authtoken="q6sne2ob3eZrg7G4KkBi", start_date="1970-01-01")
+    index_data.to_csv(file_path)
+
+
+def get_main_stock_market_index():
+    get_NASDAQ_daily_index()
+    get_DJIA_daily_index()
+    get_SP500_daily_index()
+    get_DAX_daily_index()
+    get_ASX_daily_index()
+    get_FTSE100_daily_index()
+    get_NIKKEI_daily_index()
+    get_hangSeng_index()
+
 def main():
     quandl.ApiConfig.api_key = 'q6sne2ob3eZrg7G4KkBi'
     CURRENCY_TYPE=["USD","EUR","CNY","AUD","GBP"] # AUD
     #get_gold_daily_price() # save the gold daily price data into csv file
     #get_oil_daily_price() # save the oil daily price data into csv file
-    end_date=datetime(2017,1,2)
+    end_date=datetime.today().date()
 #   end_date=datetime.today()
     get_currency_daily_price(end_date,["USD"])
+    get_currency_daily_price(end_date,["EUR"])
+    get_currency_daily_price(end_date,["AUD"])
+    get_currency_daily_price(end_date,["GBP"])
+
+    get_oil_daily_price()
+    get_gold_daily_price()
+
+    get_main_stock_market_index()
 
 
 def test():
     print("not implemented!!")
-
-
 
 
 if __name__ == "__main__":

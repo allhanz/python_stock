@@ -192,3 +192,13 @@ def get_current_month_data(stock_id):
 
 def data_type_check(data):
     return type(data)
+
+# not tested monthly historical price data
+def get_period_price(stock_id,start_time,end_time):
+    if type(stock_id) is list:
+        for id in stock_id:
+            price=q.get_period_price(id,start_time,end_time)
+    else:
+        price=q.get_period_price(stock_id,start_time,end_time)
+
+    return price

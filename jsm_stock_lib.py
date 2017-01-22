@@ -1,5 +1,5 @@
 import jsm
-import datetime
+from  datetime import datetime
 import numpy as np
 
 q = jsm.Quotes()
@@ -202,3 +202,6 @@ def get_period_price(stock_id,start_time,end_time):
         price=q.get_period_price(stock_id,start_time,end_time)
 
     return price
+
+def main():
+    print("not implemented!!")

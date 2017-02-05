@@ -1,4 +1,5 @@
 import pandas as pd
+import read_csv_to_pandas
 
 def caculate_rate(open_price,current_prince):
     rate=(current_price - open_price)/open_price *100
@@ -22,6 +23,8 @@ def yearly_rate(open_price,current_prince):
     return rate
 
 def month_daily_rate(start_date,end_date,stock_object):
-
+    print("not implemented!!")
 
 def year_daily_rate(start):
+    print("not implemented!!")
+    

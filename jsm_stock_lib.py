@@ -3,6 +3,7 @@ from  datetime import datetime
 import numpy as np
 
 q = jsm.Quotes()
+c = jsm.QuotesCsv()
 TIME_TYPE={"DAILY":jsm.DAILY,"WEEKLY":jsm.WEEKLY,"MONTHLY":jsm.MONTHLY}
 
 def jsm_type_check(time_type):
@@ -35,8 +36,8 @@ def get_current_price(stock_id):
     if not int_value_check(stock_id):
         return None
 
-    price = q.get_price()
-    return price
+    price = q.get_price(stock_id)
+    return price.close
 
 def get_monthly_price(stock_id,date):
     if not int_value_check(stock_id):
@@ -129,6 +130,7 @@ def get_end_price(stock_id,time_type):
     return end_price
 
 def get_whole_daily_data(stock_id):
+    stock_id=list(stock_id)
     if not int_value_check(stock_id):
         return None
 
@@ -202,6 +204,12 @@ def get_period_price(stock_id,start_time,end_time):
         price=q.get_period_price(stock_id,start_time,end_time)
 
     return price
+
+def save_whole_data(stock_id_list,file_path_list):
+    for id in stock_id_list:
+        index_value=stock_id_list.index(id)
+        file_path=file_path_list[index_value]
+        c.save_historical_prices(file_path,id,jsm.DAILY,all=True)
 
 def main():
     print("not implemented!!")

@@ -3,7 +3,10 @@ import numpy as np
 import os
 import sys
 
-
+def get_home_():
+    home_path=os.getenv("HOME")
+    return home_path
+    
 header_str=["date","open","high","low","close","volume", "_adj_close"]
 ROOT_PATH="/Users/zhonghan/workspace/japan_stock_analysis/python_stock/data/stock_data/"
 def read_from_csv(dir_path,datetime,stock_id,all): #specif the year

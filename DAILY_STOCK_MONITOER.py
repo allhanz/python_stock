@@ -38,6 +38,13 @@ def stock_info_list(stock_dataframe,label):
     stock_info_list=np.array(stock_dataframe[label])
     return stock_info_list
 
+def remove_error_id(stock_dataframe):
+    print(error_stock_id)
+    for error_id in error_stock_id:
+        stock_dataframe.drop(stock_dataframe["SC"]==error_id)
+    print(len(stock_dataframe["SC"]))
+    return stock_dataframe
+
 def rate_check(stock_dataframe,check_time,check_type): # now just for dialy rate check
     #up_rate_info={"stock_id":[],"stock_name":[]}
     if check_type=="DAILY":
@@ -74,12 +81,15 @@ def rate_check(stock_dataframe,check_time,check_type): # now just for dialy rate
     current_price=[]
 
     stock_id_list=stock_info_list(stock_dataframe,"SC")
+
     stock_name_list=stock_info_list(stock_dataframe,"名称")
 
     for stock_id in stock_id_list:
         current_price=get_current_price(stock_id)
         open_price=get_open_price(stock_id)
         rate=(open_price - current_price)/open_price
+        print(rate)
+
         if rate >= UP_THOLD_VALUE or rate < DOWN_THOLD_VALUE:
             index_value=stock_id_list.index(stock_id)
             check_time.append(check_time)
@@ -89,15 +99,20 @@ def rate_check(stock_dataframe,check_time,check_type): # now just for dialy rate
             open_price.append(open_price)
             current_price.append(current_price)
 
-    rate_info["check_time"]=check_time
-    rate_info["stock_id"]=stock_id
-    rate_info["stock_name"]=stock_name
-    rate_info["rate"]=rate
-    rate_info["open_price"]=open_price
-    rate_info["current_price"]=current_price
+            rate_info["check_time"]=check_time
+            rate_info["stock_id"]=stock_id
+            rate_info["stock_name"]=stock_name
+            rate_info["rate"]=rate
+            rate_info["open_price"]=open_price
+            rate_info["current_price"]=current_price
+            print("check_time:",check_time)
+            print("stock_id:",stock_id)
+            print("rate:",rate)
+            print("open_price:",open_price)
+            print("current_price(or close price):",current_price)
+            contents=str(rate_info)
+            send_stock_rate_email(subject,contents)
 
-    contents=str(rate_info)
-    send_stock_rate_email(subject,contents)
     return rate_info
 
 def send_stock_rate_email(subject,contents):
@@ -136,12 +151,12 @@ def daily_monitor(stock_dataframe):
         current_time=get_current_time()
         hour_num=int(current_time["hour"])
         print(hour_num)
-        #hour_num=10 # for test
+        hour_num=10 # for test
         if hour_num>=9 and hour_num<=15:
             daily_rate_info=rate_check(stock_dataframe,now_date,"DAILY")
-            weekly_rate_info=rate_check(stock_dataframe,now_date,"WEEKLY")
-            monthly_rate_info=rate_check(stock_dataframe,now_date,"MONTHLY")
-            three_month_rate_info=rate_check(stock_dataframe,now_date,"THREE_MONTHLY")
+            #weekly_rate_info=rate_check(stock_dataframe,now_date,"WEEKLY")
+            #monthly_rate_info=rate_check(stock_dataframe,now_date,"MONTHLY")
+            #three_month_rate_info=rate_check(stock_dataframe,now_date,"THREE_MONTHLY")
             #yearly_rate_info=rate_check(stock_dataframe.now_date,"YEARLY")
             print("monitoring.....")
 
@@ -163,10 +178,13 @@ def main_monitor_loop():
     type3="toho2"
     type4="tohomum"
     stock_dataframe=read_stock_id(type2)
-
+    stock_dataframe_ok=remove_error_id(stock_dataframe)
+    list=stock_info_list(stock_dataframe_ok,"SC")
+    print(len(list))
+    exit()
     try:
         while True:
-            flag=daily_monitor(stock_dataframe)
+            flag=daily_monitor(stock_dataframe_ok)
             if flag==0:
                 return
 

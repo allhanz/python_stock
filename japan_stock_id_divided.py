@@ -8,7 +8,8 @@ import sys
 #sys.setdefaultencoding('utf8')
 x=sys.getdefaultencoding()
 print(x)
-
+#error_stock_id=[1333,1384,1414,1417,1419,1420,1430,1435,1514,1605,1606,1662,1663,1712,1719,1720,1721,1722,1726,1766,1773] # error stock id
+error_stock_id=[6767,8301,8728]
 """
 def stock_id_divide(sub_name):
     csv_file="./japan-all-stock-ID-oriData.csv"
@@ -38,7 +39,7 @@ toho1_csv_file="./stock_id/japan/tosho-1st-stock-prices.csv"
 toho2_csv_file="./stock_id/japan/tosho-2nd-stock-prices.csv"
 toho_mother_csv_file="./stock_id/japan/tosho-mothers-stock-prices.csv"
 
-def read_stock_id(stock_type):
+def read_stock_info_dataframe(stock_type):
     stock_dataframe=pd.DataFrame()
 
     if not os.path.exists(nikkei225_csv_file):
@@ -89,6 +90,18 @@ def read_stock_id(stock_type):
         exit()
     #return stock_dataframe
     return csv_data
+def get_stock_id_array(info_dataframe):
+    id_info=info_dataframe["SC"]
+    id_array=np.asarray(id_info)
+    id_processed=remove_error_stock_id(id_array)
+    return id_processed
+
+def remove_error_stock_id(stock_id_list):
+    stock_id_list=list(stock_id_list)
+    for error_id in error_stock_id:
+        if error_id in stock_id_list:
+            stock_id_list.remove(error_id)
+    return stock_id_list
 
 def main():
     type1="nikkei225"

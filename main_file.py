@@ -1,17 +1,18 @@
 from jsm_stock_lib import *
 import pandas as pd
-import datetime
+from datetime import datetime
 import jsm
 import os
 import time
 import calendar
 from japan_stock_id_divided import *
+import multiprocessing
 
 q = jsm.Quotes()
 c = jsm.QuotesCsv()
 FILE_TYPE=".csv"
-now=datetime.datetime.now()
-ROOT_PATH="/Users/zhonghan/workspace/japan_stock_analysis/python_stock/stock_data/"
+now=datetime.now()
+ROOT_PATH="./stock_data/"
 MONTHLY_DIR_PATH="./stock_data/monthly_data/"
 date_str=now.strftime("%Y%m%d")
 #stock_id must be a int
@@ -82,7 +83,7 @@ def last_day_of_month(date):
     return date.replace(month=date.month+1, day=1) - datetime.timedelta(days=1)
     '''
 
-
+##take too much time not used
 def save_whole_data(stock_id,time_type): #stock_id is a list #test ok
     whole_data_path="./stock_data/whole_data/"
     start_time = datetime.date(2000,1,1)
@@ -90,10 +91,10 @@ def save_whole_data(stock_id,time_type): #stock_id is a list #test ok
     start_month=start_time.month
     start_day=start_time.day
 
-    now_date=datetime.datetime.now().date()
+    now_date=datetime.now().date()
     end_month=now_date.month
     end_year=now_date.year
-    end_day=last_day_of_month(datetime.date(now.year,now.month-1,1))
+    end_day=last_day_of_month(datetime.date(now.year,now.month,1))
     time_period=[[],[]]
     file_name_suffix = []
     num_year=end_year-start_year+1
@@ -131,32 +132,33 @@ def save_whole_data(stock_id,time_type): #stock_id is a list #test ok
             print("stock_id:"+str(id))
             for data1 in time_period[1]:
                 index=time_period[1].index(data1)
-                print(data1)
+                #print(data1)
                 data_str=data1.strftime("%Y%m%d")
-                print(data_str)
-                print("index:"+str(index))
+                #print(data_str)
+                #print("index:"+str(index))
 
-                print(data_str)
+                #print(data_str)
                 save_folder=ROOT_PATH+str(data1.year)+"/"
                 file_name=str(id)+"-"+data_str+FILE_TYPE
                 file_path=save_folder+file_name
                 if os.path.exists(file_path):
-                    print(file_path+" exists!! skip!!")
+                    xxxx=0
+                    #print(file_path+" exists!! skip!!")
                 else:
-                    print("stock download")
+                    #print("stock download")
                     c.save_historical_prices(file_path,id,jsm_type,time_period[0][index],data1)
 
                 while not os.path.exists(file_path):
                     time.sleep(1)
 
                 #print(file_path)
-                print("start_time:")
-                print(time_period[0][index])
-                print("end_time:")
-                print(data1)
-                print("next stok download:")
+                #print("start_time:")
+                #print(time_period[0][index])
+                #print("end_time:")
+                #print(data1)
+                #print("next stok download:")
                 #print(jsm_type)
-        print(time_period[1])
+        #print(time_period[1])
 
 
     #elif isinstance(data_type,(int,np.int64):
@@ -181,7 +183,7 @@ def download_current_monthly_data(stock_id):
         print("stock_id data type error")
         exit()
 
-def check_file(dir_path,file_name_list,update_enable): #update_enable:1 update 0: not update
+def check_files(dir_path,file_name_list,update_enable): #update_enable:1 update 0: not update
     data_type=data_type_check(file_name_list)
     basename_list=[]
     update_file_list=[]
@@ -205,17 +207,62 @@ def check_file(dir_path,file_name_list,update_enable): #update_enable:1 update 0
 
     return update_file_list
 
+def check_reputecated_file(stock_id_list):
+    day_time=datetime.today().date()
+    time_str=day_time.strftime("%Y%m%d")
+    id_and_file_list=[[],[]]
+    whole_data_folder_path="./stock_data/whole_data"
+    if not os.path.exists(whole_data_folder_path):
+        os.mkdir(whole_data_folder_path)
+
+    file_list=os.listdir(whole_data_folder_path)
+    print(file_list)
+    id_list=[]
+    for item in file_list:
+        id=item[:4]
+        id_list.append(int(id))
+
+    for data in stock_id_list:
+        if data in id_list:
+            print("reputicated id:",data)
+            stock_id_list.remove(data)
+
+    for id in stock_id_list:
+        csv_file_name=str(id)+"-"+time_str+".csv"
+        file_path=whole_data_folder_path+"/"+csv_file_name
+        id_and_file_list[0].append(id)
+        id_and_file_list[1].append(file_path)
+
+    #print("check_reputecated_file id:",stock_id_list)
+    return id_and_file_list
+
 def main(save_type):
     type1="nikkei225"
-    stock_dataframe=read_stock_id(type1)
+    type2="toho1"
+    type3="toho2"
+    type4="tohomum"
+    type=type2
+    stock_dataframe=read_stock_info_dataframe(type)
     print(len(stock_dataframe["SC"])) # nkkei 225
-    stock_id=stock_dataframe["SC"]
-    list_data=[]
-    for data in stock_id:
-        list_data.append(data)
-    print(len(list_data))
+    stock_id=get_stock_id_array(stock_dataframe)
 
+    # error stock id in toho1
+    #error_stock_id=[1333,1384,1414,1417,1419,1420,1430,1435,1514,1605,1606,1662,1663,1712,1719,1720,1721,1722,1726,1766,1773,1909,1937,2060,2117,2120,2124,2127,2131,2139,2151,2154,2157,2168,2169,2170,2174,2175,2181,2183,2193,2196,2198,2222,2220,2229,2269,2270,2296,2301,2305,2309,2317,2325,2326,2327,2331,2335,2337,2353,2359,2371,2372,2374,2376,2378,2379,2384,2389,2395,2398,2410,2413,2418,2427,2428,2429,2432] # not used
+
+
+
+
+    end_time=datetime(2017,1,24)
+    start_index=list_data.index(1821)
+    end_index=500
+
+        #print("stock_id:",data)
+        #whole_price=q.get_historical_prices(data)
+        c.save_historical_prices(file_path,data,jsm.DAILY,all=True)
+        time.sleep(1)
+        #print("price:",price)
     #save_current_month_to_csv(list_data)
+    #save_whole_data(list_data,save_type)
 
     print("download the whole data!!")
     #download_whole_data(list_data)

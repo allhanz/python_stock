@@ -6,6 +6,8 @@ import os
 import time
 import calendar
 from japan_stock_id_divided import *
+from DAILY_STOCK_MONITOER import *
+from quandl_data_downlaod import *
 
 q = jsm.Quotes()
 c = jsm.QuotesCsv()
@@ -205,7 +207,14 @@ def check_file(dir_path,file_name_list,update_enable): #update_enable:1 update 0
 
     return update_file_list
 
-def main(save_type):
+def downlaod_stock_data(save_type):
+    print("not implemented!!")
+
+def main():
+    downlaod_stock_data()
+    main_monitor_loop()
+    
+"""
     type1="nikkei225"
     stock_dataframe=read_stock_id(type1)
     print(len(stock_dataframe["SC"])) # nkkei 225
@@ -222,6 +231,7 @@ def main(save_type):
     #save_whole_data()
 
     print("main function has been called")
+"""
 
 """
     #old version source code (not used)
@@ -251,6 +261,4 @@ def main(save_type):
 """
 
 if __name__=="__main__":
-    #save_type=sys.argv[1]
-    save_type="DAILY"
-    main(save_type)
+    main()

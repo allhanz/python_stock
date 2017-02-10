@@ -223,7 +223,7 @@ def get_ASX_daily_index():
     index_data=quandl.get("NASDAQOMX/COMP", authtoken="q6sne2ob3eZrg7G4KkBi")
     index_data.to_csv(file_path)
 
-def get_FTSE100_daily_index():
+def get_FTSE100_daily_index():# UK
     folder="nasdaq_index"
     folder_path=stock_market_index+"/"+folder
     csv_file="ansdaq_index.csv"
@@ -267,7 +267,7 @@ def get_main_stock_market_index():
     get_NIKKEI_daily_index()
     get_hangSeng_index()
 
-def main():
+def download_finance_data():
     quandl.ApiConfig.api_key = 'q6sne2ob3eZrg7G4KkBi'
     CURRENCY_TYPE=["USD","EUR","CNY","AUD","GBP"] # AUD
     #get_gold_daily_price() # save the gold daily price data into csv file
@@ -284,6 +284,8 @@ def main():
 
     get_main_stock_market_index()
 
+def main():
+    download_finance_data()
 
 def test():
     print("not implemented!!")

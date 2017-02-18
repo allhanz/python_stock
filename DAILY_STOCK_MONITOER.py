@@ -40,10 +40,11 @@ def stock_info_list(stock_dataframe,label):
 
 def remove_error_id(stock_dataframe):
     print(error_stock_id)
+    x=stock_dataframe
     for error_id in error_stock_id:
-        stock_dataframe.drop(stock_dataframe["SC"]==error_id)
-    print(len(stock_dataframe["SC"]))
-    return stock_dataframe
+        x=x.ix(x["SC"]!=int(error_id))
+    print(len(x["SC"]))
+    return x
 
 def rate_check(stock_dataframe,check_time,check_type): # now just for dialy rate check
     #up_rate_info={"stock_id":[],"stock_name":[]}
@@ -155,7 +156,7 @@ def daily_monitor(stock_dataframe):
         if hour_num>=9 and hour_num<=15:
             daily_rate_info=rate_check(stock_dataframe,now_date,"DAILY")
             #weekly_rate_info=rate_check(stock_dataframe,now_date,"WEEKLY")
-            #monthly_rate_info=rate_check(stock_dataframe,now_date,"MONTHLY")
+            monthly_rate_info=rate_check(stock_dataframe,now_date,"MONTHLY")
             #three_month_rate_info=rate_check(stock_dataframe,now_date,"THREE_MONTHLY")
             #yearly_rate_info=rate_check(stock_dataframe.now_date,"YEARLY")
             print("monitoring.....")
@@ -177,7 +178,8 @@ def main_monitor_loop():
     type2="toho1"
     type3="toho2"
     type4="tohomum"
-    stock_dataframe=read_stock_id(type2)
+    stock_dataframe=read_stock_info_dataframe(type3)
+    print(stock_dataframe)
     stock_dataframe_ok=remove_error_id(stock_dataframe)
     list=stock_info_list(stock_dataframe_ok,"SC")
     print(len(list))

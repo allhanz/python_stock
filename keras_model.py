@@ -1,12 +1,17 @@
 # the example for study
 # Create first network with Keras
-from keras.models import Sequential
+from keras.models import Sequential, model_from_json
 from keras.layers import Dense
 import numpy as np
 from read_csv_to_pandas import *
-f_model="./ML_model"
+import os
+import json
 
-def build_ML_model():
+
+f_model="./ML_model"
+f_log="./log/ML_model_log"
+
+def build_ML_model(input_data):
 
     # fix random seed for reproducibility
     seed = 7
@@ -43,10 +48,32 @@ def build_ML_model():
     rounded = np.round(predictions)
     print(len(rounded))
 
-def save_trained_ML_model(model_data,file_name):
-
-def load_ML_model(model_data,file_name):
+def save_trained_ML_model(model_data,file_name): #json format
+    json_str=model_data.to_json()
+    open(os.path.join(f_model,file_name,"w").write(json)
     print("not implemented!!")
 
+def load_ML_model(model_data,file_name): # load from json file
+    ML_model=model_from_json(open(os.path.join(f_model,file_name),"r").read())
+    return ML_model
+
+def get_ML_input_data(stock_id_list,all):
+    stock_data=get_one_stock_whole_data(stock_id_list,all)
+    return stock_data
+
+def data_pre_process(stock_data_list):
+    #stock_data_list=[{""}]
+    print("not implemented!!")
+
+def main():
+    if os.path.exists(f_log):
+        os.mkdir(f_log)
+
+    stock_id_list=["1419","1420"]
+    all_type=False
+    input_data=get_ML_input_data(stock_id_list,all_type)
+    print(input_data)
+
 if __name__=="__main__":
-    build_ML_model()
+    main()
+    #build_ML_model()

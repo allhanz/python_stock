@@ -207,7 +207,7 @@ def check_files(dir_path,file_name_list,update_enable): #update_enable:1 update 
 
     return update_file_list
 
-def check_reputecated_file(stock_id_list):
+def check_same_file(stock_id_list):
     day_time=datetime.today().date()
     time_str=day_time.strftime("%Y%m%d")
     id_and_file_list=[[],[]]
@@ -236,6 +236,7 @@ def check_reputecated_file(stock_id_list):
     #print("check_reputecated_file id:",stock_id_list)
     return id_and_file_list
 
+
 def main(save_type):
     type1="nikkei225"
     type2="toho1"
@@ -258,8 +259,8 @@ def main(save_type):
 
         #print("stock_id:",data)
         #whole_price=q.get_historical_prices(data)
-        c.save_historical_prices(file_path,data,jsm.DAILY,all=True)
-        time.sleep(1)
+    c.save_historical_prices(file_path,data,jsm.DAILY,all=True)
+    time.sleep(1)
         #print("price:",price)
     #save_current_month_to_csv(list_data)
     #save_whole_data(list_data,save_type)

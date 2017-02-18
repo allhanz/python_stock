@@ -20,15 +20,17 @@ def get_data_dir():
     whole_data_path=current_path+"/stock_data/whole_data"
     return whole_data_path
 
-def get_one_stock_whole_data(stock_id):
+def get_one_stock_whole_data(stock_id,all):
     #remove_same_file()
     data_dir=get_data_dir()
-    all=False
+    if all=="":
+        all=False
+    
     data=read_from_csv(data_dir,stock_id,all)
     print("stock datframe:",data)
     return data
 
-def remove_same_file(): # test NG 
+def remove_same_file(): # test NG
     data_dir=get_data_dir()
     full_path_list=list_up_files(data_dir)
     file_list=[] # file name list not include the path info

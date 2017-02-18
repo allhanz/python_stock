@@ -1,31 +1,89 @@
-"""
 # bokeh sample codes
-from bokeh.plotting import figure, output_file, show
+#from bokeh.io import output_file, show
+from bokeh.layouts import gridplot
+from bokeh.palettes import Viridis3
+from bokeh.plotting import figure
+from read_csv_to_pandas import *
+from bokeh.charts import Scatter, output_file, show
 
-# prepare some data
-x = [1, 2, 3, 4, 5]
-y = [6, 7, 2, 4, 5]
+def get_stock_data(stock_id_list,all): # all= True or False
+    data=get_one_stock_whole_data(stock_id_list,all)
+    return data
 
-# output to static HTML file
-output_file("lines.html")
+def display_stock_info(stock_info): #stock_info={"stock_id":..."stock_info":....}
+    output_file("stock_data_displayer.html")
 
-# create a new plot with a title and axis labels
-p = figure(title="simple line example", x_axis_label='x', y_axis_label='y')
+    for item in stock_info:
+        stock_id=item["stock_id"]
+        stock_price_info=item["stock_info"]
+        date_data=stock_price_info["date"]
+        open_price=stock_price_info["open"]
+        high_price=stock_price_info["high"]
+        low_price=stock_price_info["low"]
+        close_price=stock_price_info["close"]
+        volume_data=stock_price_info["volume"]
+        adj_v_data=stock_price_info["_adj_close"]
 
-# add a line renderer with legend and line thickness
-p.line(x, y, legend="Temp.", line_width=2)
+        p = Scatter(stock_price_info, x='date', y="open",title=stock_id+" price data", legend="top_left",xlabel="date", ylabel="open price")
+        show(p)
 
-# show the results
-show(p)
-"""
-# have errors
+        open_f=figure()
+        high_f=figure()
+        low_f=figure()
+        close_f=figure()
+        volume_f=figure()
+        adj_v_f=figure()
 
-import seaborn as sns
-sns.set(style="ticks")
 
-# Load the example tips dataset
-tips = sns.load_dataset("tips")
+def plot_test():
+    output_file("layout_grid_convenient.html")
 
-# Draw a nested boxplot to show bills by day and sex
-sns.boxplot(x="day", y="total_bill", hue="sex", data=tips, palette="PRGn")
-sns.despine(offset=10, trim=True)
+    x = list(range(11))
+    y0 = x
+    y1 = [10 - i for i in x]
+    y2 = [abs(i - 5) for i in x]
+
+    # create three plots
+    s1 = figure()
+    s1.circle(x, y0, size=10, color=Viridis3[0])
+    s2 = figure()
+    s2.triangle(x, y1, size=10, color=Viridis3[1])
+    s3 = figure()
+    s3.square(x, y2, size=10, color=Viridis3[2])
+
+    # make a grid
+    grid = gridplot([s1, s2, s3], ncols=2, plot_width=250, plot_height=250)
+
+    # show the results
+    show(grid)
+
+def main():
+    stock_info=get_stock_data(["1419"],False)
+    """
+    item=stock_info[0]
+    stock_id=item["stock_id"]
+    stock_price_info=item["stock_info"]
+    date_data=stock_price_info["date"]
+    open_price=stock_price_info["open"]
+    high_price=stock_price_info["high"]
+    low_price=stock_price_info["low"]
+    close_price=stock_price_info["close"]
+    volume_data=stock_price_info["volume"]
+    adj_v_data=stock_price_info["_adj_close"]
+
+    print(stock_id)
+    print(date_data)
+    print(open_price)
+    print(high_price)
+    print(low_price)
+    print(close_price)
+    print(volume_data)
+    print(adj_v_data)
+    """
+    display_stock_info(stock_info)
+    #plot_test()
+    print("not implemented!!")
+
+
+if __name__=="__main__":
+    main()

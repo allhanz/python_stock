@@ -6,7 +6,12 @@ import os
 import time
 import calendar
 from japan_stock_id_divided import *
+<<<<<<< HEAD
+from DAILY_STOCK_MONITOER import *
+from quandl_data_downlaod import *
+=======
 import multiprocessing
+>>>>>>> cc232fdbd7e5d0bfc13a46d06c7c87eb04e78fcf
 
 q = jsm.Quotes()
 c = jsm.QuotesCsv()
@@ -207,7 +212,21 @@ def check_files(dir_path,file_name_list,update_enable): #update_enable:1 update 
 
     return update_file_list
 
+<<<<<<< HEAD
 def check_same_file(stock_id_list):
+=======
+<<<<<<< HEAD
+def downlaod_stock_data(save_type):
+    print("not implemented!!")
+
+def main():
+    downlaod_stock_data()
+    main_monitor_loop()
+    
+"""
+=======
+def check_reputecated_file(stock_id_list):
+>>>>>>> 3f21072f3855b1cc8e3fce673a9d55cc129b3882
     day_time=datetime.today().date()
     time_str=day_time.strftime("%Y%m%d")
     id_and_file_list=[[],[]]
@@ -238,6 +257,7 @@ def check_same_file(stock_id_list):
 
 
 def main(save_type):
+>>>>>>> cc232fdbd7e5d0bfc13a46d06c7c87eb04e78fcf
     type1="nikkei225"
     type2="toho1"
     type3="toho2"
@@ -270,6 +290,7 @@ def main(save_type):
     #save_whole_data()
 
     print("main function has been called")
+"""
 
 """
     #old version source code (not used)
@@ -299,6 +320,4 @@ def main(save_type):
 """
 
 if __name__=="__main__":
-    #save_type=sys.argv[1]
-    save_type="DAILY"
-    main(save_type)
+    main()

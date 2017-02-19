@@ -148,9 +148,12 @@ def daily_monitor(stock_dataframe):
     weekday=get_current_weekday()
     #print(weekday)
     now_date=datetime.now().date()
+    #now_date=datetime(2017,1,19)
+    #weekday=3 # for test
     if weekday != 6 or weekday !=5:
         current_time=get_current_time()
         hour_num=int(current_time["hour"])
+        #hour_num=10 # for test
         print(hour_num)
         hour_num=10 # for test
         if hour_num>=9 and hour_num<=15:
@@ -163,8 +166,9 @@ def daily_monitor(stock_dataframe):
 
         else:
             print("out of time....")
+            
             #time.sleep(10)
-            return 0
+            #return 0
 
     else:
         print("today is sunday or saturday!!")
@@ -178,12 +182,22 @@ def main_monitor_loop():
     type2="toho1"
     type3="toho2"
     type4="tohomum"
+<<<<<<< HEAD
     stock_dataframe=read_stock_info_dataframe(type3)
     print(stock_dataframe)
+=======
+<<<<<<< HEAD
+    type=type2
+    stock_dataframe=read_stock_id(type)
+
+=======
+    stock_dataframe=read_stock_id(type2)
+>>>>>>> 3f21072f3855b1cc8e3fce673a9d55cc129b3882
     stock_dataframe_ok=remove_error_id(stock_dataframe)
     list=stock_info_list(stock_dataframe_ok,"SC")
     print(len(list))
     exit()
+>>>>>>> cc232fdbd7e5d0bfc13a46d06c7c87eb04e78fcf
     try:
         while True:
             flag=daily_monitor(stock_dataframe_ok)
